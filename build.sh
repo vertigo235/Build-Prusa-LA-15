@@ -1,7 +1,8 @@
 #!/bin/bash 
 BUILD_ENV="1.0.2"
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
-DEFAULT_VARIANT="1_75mm_MK3-EINSy10a-E3Dv6full.h"
+PATH="$SCRIPT_PATH/bin:$PATH"
+DEFAULT_VARIANT="MK3-BMG16.h"
 VARIANT="${1:-$DEFAULT_VARIANT}"
 
 if [ ! -d "build-env" ]; then
