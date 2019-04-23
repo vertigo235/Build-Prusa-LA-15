@@ -7655,7 +7655,7 @@ bool bInhibitFlag;
 #ifdef IR_SENSOR
           bInhibitFlag=(menu_menu==lcd_menu_show_sensors_state); // Support::SensorInfo menu active
 #endif // IR_SENSOR
-          if ((mcode_in_progress != 600) && (eFilamentAction != e_FILAMENT_ACTION_autoLoad) && (!bInhibitFlag)) //M600 not in progress, preHeat @ autoLoad menu not active, Support::ExtruderInfo/SensorInfo menu not active
+          if ((mcode_in_progress != 600) && (eFilamentAction != e_FILAMENT_ACTION_autoLoad) && (!bInhibitFlag) && (menu_menu != lcd_move_e)) //M600 not in progress, preHeat @ autoLoad menu not active, Support::ExtruderInfo/SensorInfo menu not active
 		{
 			if (!moves_planned() && !IS_SD_PRINTING && !is_usb_printing && (lcd_commands_type != LCD_COMMAND_V2_CAL) && !wizard_active)
 			{
