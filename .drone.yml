@@ -108,6 +108,35 @@ steps:
       - bash -x PF-build.sh 1_75mm_MK25S-BMG-.9-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-BMG-1.8-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-BMG-1.8-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
+    when:
+      event:
+       - tag
+  
+  - name: skele-build
+    image: vertigo235/fw-build
+    environment:
+        BUILD_TYPE: GOLD
+    commands:
+      - chmod +x PF-build.sh
+      - chmod +x lang/config.sh
+      - chmod +x lang/fw-clean.sh
+      - chmod +x lang/lang-clean.sh
+      - cd $DRONE_WORKSPACE_BASE
+      - pwd
+      - ls
+      - wget https://raw.githubusercontent.com/nato2k/Skelestruder_Firmware_Patch/master/skele_patch.py
+      - python skele_patch.py
+      - cp ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-EINSy10a-E3Dv6full.h ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-Skelestruder-EINSy10a-E3Dv6full.h
+      - cd $CI_WORKSPACE
+      - bash -x PF-build.sh 1_75mm_MK3-Skelestruder-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+    when:
+      event:
+       - push
+       - tag
+
+  - name: prepare-hex
+    image: vertigo235/fw-build
+    commands:
       - cd $CI_WORKSPACE
       - mkdir out
       - cd $DRONE_WORKSPACE_BASE/Hex-files
@@ -116,6 +145,7 @@ steps:
     when:
       event:
        - tag
+
   - name: publish
     image: plugins/github-release
     settings:
