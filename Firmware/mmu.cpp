@@ -685,17 +685,7 @@ void manage_response(bool move_axes, bool turn_off_nozzle, uint8_t move)
 					  z_position_bckp = current_position[Z_AXIS];
 					  x_position_bckp = current_position[X_AXIS];
 					  y_position_bckp = current_position[Y_AXIS];
-				  
-					  //lift z
-					  current_position[Z_AXIS] += Z_PAUSE_LIFT;
-					  if (current_position[Z_AXIS] > Z_MAX_POS) current_position[Z_AXIS] = Z_MAX_POS;
-					  plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 15, active_extruder);
-					  st_synchronize();
-					  					  
-					  //Move XY to side
-					  current_position[X_AXIS] = X_PAUSE_POS;
-					  current_position[Y_AXIS] = Y_PAUSE_POS;
-					  plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 50, active_extruder);
+                      park_extruder(current_position, 0, Z_PAUSE_LIFT, X_PAUSE_POS, Y_PAUSE_POS);
 					  st_synchronize();
 				  }
 				  if (turn_off_nozzle) {

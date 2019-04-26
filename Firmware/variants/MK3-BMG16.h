@@ -331,21 +331,23 @@
 #ifdef FILAMENTCHANGEENABLE
 #define FILAMENTCHANGE_XPOS 211
 #define FILAMENTCHANGE_YPOS 0
-#define FILAMENTCHANGE_ZADD 2
-#define FILAMENTCHANGE_FIRSTRETRACT -2
-#define FILAMENTCHANGE_FINALRETRACT -100
+#define FILAMENTCHANGE_ZADD Z_PAUSE_LIFT
 
-#define FILAMENTCHANGE_FIRSTFEED 65 //E distance in mm for fast filament loading sequence used used in filament change (M600)
-#define FILAMENTCHANGE_FINALFEED 35 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
-#define FILAMENTCHANGE_RECFEED 5
+#define FILAMENTCHANGE_FIRSTRETRACT -2   // Retraction performed before parking the extruder or unloading filament
+#define FILAMENTCHANGE_FINALRETRACT -100 // Full filament retraction length
 
-#define FILAMENTCHANGE_XYFEED 50
-#define FILAMENTCHANGE_EFEED_FIRST (1000 / 60) // feedrate in mm/s for fast filament loading sequence used in filament change (M600)
-#define FILAMENTCHANGE_EFEED_FINAL ( 120 / 60) // feedrate in mm/s for slow filament loading sequence used in filament change (M600) and filament load (M701)
-//#define FILAMENTCHANGE_RFEED 400
-#define FILAMENTCHANGE_RFEED 7000 / 60
-#define FILAMENTCHANGE_EXFEED 2
-#define FILAMENTCHANGE_ZFEED 15
+#define FILAMENTCHANGE_FIRSTFEED 65 // E distance in mm for fast filament loading sequence used used in filament change (M600)
+#define FILAMENTCHANGE_FINALFEED 35 // E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701)
+
+#define FILAMENTCHANGE_RESUMEFEED 5 // E priming distance performed after resuming
+
+#define FILAMENTCHANGE_XYFEED        150         // XY feedrate for parking the extruder (mm/s, max_feedrate_x / 20)
+#define FILAMENTCHANGE_ZFEED         12          // Z feedrate for parking the xtruder (mm/s, max_feedrate_z)
+#define FILAMENTCHANGE_EFEED_FIRST   (1000 / 60) // feedrate in mm/s for fast filament loading sequence used in filament change (M600)
+#define FILAMENTCHANGE_EFEED_FINAL   ( 120 / 60) // feedrate in mm/s for slow filament loading sequence used in filament change (M600) and filament load (M701)
+#define FILAMENTCHANGE_EFEED_RETRACT (2100 / 60) // quick filament retract feedrate in mm/s
+#define FILAMENTCHANGE_EFEED_EJECT   (1000 / 60) // filament ejection feedrate in mm/s
+#define FILAMENTCHANGE_EFEED_PRIME   ( 120 / 60) // filament priming feedrate (used before unloading and after resuming a print)
 
 #endif
 

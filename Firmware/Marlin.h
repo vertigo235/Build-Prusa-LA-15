@@ -498,3 +498,4 @@ void M600_wait_for_user(float HotendTempBckp);
 void M600_check_state(float nozzle_temp);
 void load_filament_final_feed(float* target);
 void marlin_wait_for_click();
+void park_extruder(float* target, float e_shift, float z_shift, float x_pos, float y_pos);

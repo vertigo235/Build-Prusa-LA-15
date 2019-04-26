@@ -3043,6 +3043,28 @@ void gcode_M114()
 	SERIAL_PROTOCOLLN("");
 }
 
+
+void park_extruder(float* target, float e_shift, float z_shift, float x_pos, float y_pos)
+{
+    // Retract E
+    target[E_AXIS] += e_shift;
+    plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS],
+                     FILAMENTCHANGE_EFEED_RETRACT, active_extruder);
+
+    // Lift Z
+    target[Z_AXIS] += z_shift;
+    if (target[Z_AXIS] > Z_MAX_POS) target[Z_AXIS] = Z_MAX_POS;
+    plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS],
+                     FILAMENTCHANGE_ZFEED, active_extruder);
+
+    // Move XY to side
+    target[X_AXIS] = x_pos;
+    target[Y_AXIS] = y_pos;
+    plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS],
+                     FILAMENTCHANGE_XYFEED, active_extruder);
+}
+
+
 static void gcode_M600(bool automatic, float x_position, float y_position, float z_shift, float e_shift, float /*e_shift_late*/)
 {
     st_synchronize();
@@ -3063,23 +3085,7 @@ static void gcode_M600(bool automatic, float x_position, float y_position, float
     lastpos[Z_AXIS] = current_position[Z_AXIS];
     lastpos[E_AXIS] = current_position[E_AXIS];
 
-    //Retract E
-    current_position[E_AXIS] += e_shift;
-    plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS],
-            current_position[E_AXIS], FILAMENTCHANGE_RFEED, active_extruder);
-    st_synchronize();
-
-    //Lift Z
-    current_position[Z_AXIS] += z_shift;
-    plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS],
-            current_position[E_AXIS], FILAMENTCHANGE_ZFEED, active_extruder);
-    st_synchronize();
-
-    //Move XY to side
-    current_position[X_AXIS] = x_position;
-    current_position[Y_AXIS] = y_position;
-    plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS],
-            current_position[E_AXIS], FILAMENTCHANGE_XYFEED, active_extruder);
+    park_extruder(current_position, e_shift, z_shift, x_position, y_position);
     st_synchronize();
 
     //Beep, manage nozzle heater and wait for user to start unload filament
@@ -3141,15 +3147,15 @@ static void gcode_M600(bool automatic, float x_position, float y_position, float
     //Feed a little of filament to stabilize pressure
     if (!automatic)
     {
-        current_position[E_AXIS] += FILAMENTCHANGE_RECFEED;
+        current_position[E_AXIS] += FILAMENTCHANGE_RESUMEFEED;
         plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS],
-                current_position[E_AXIS], FILAMENTCHANGE_EXFEED, active_extruder);
+                current_position[E_AXIS], FILAMENTCHANGE_EFEED_PRIME, active_extruder);
     }
 
     //Move XY back
     plan_buffer_line(lastpos[X_AXIS], lastpos[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS],
             FILAMENTCHANGE_XYFEED, active_extruder);
-    st_synchronize();
+
     //Move Z back
     plan_buffer_line(lastpos[X_AXIS], lastpos[Y_AXIS], lastpos[Z_AXIS], current_position[E_AXIS],
             FILAMENTCHANGE_ZFEED, active_extruder);
@@ -3697,28 +3703,13 @@ void process_commands()
                         lastpos[Y_AXIS]=current_position[Y_AXIS];
                         lastpos[Z_AXIS]=current_position[Z_AXIS];
                         lastpos[E_AXIS]=current_position[E_AXIS];
-                        //retract by E
-                        
-                        target[E_AXIS]+= FILAMENTCHANGE_FIRSTRETRACT ;
-                        
-                        plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 400, active_extruder);
 
+                        park_extruder(target, FILAMENTCHANGE_FIRSTRETRACT, FILAMENTCHANGE_ZADD,
+                                      FILAMENTCHANGE_XPOS, FILAMENTCHANGE_YPOS);
 
-                        target[Z_AXIS]+= FILAMENTCHANGE_ZADD ;
-
-                        plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 300, active_extruder);
-
-                        target[X_AXIS]= FILAMENTCHANGE_XPOS ;
-                        
-                        target[Y_AXIS]= FILAMENTCHANGE_YPOS ;
-                         
-                 
-                        plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 70, active_extruder);
-
-                        target[E_AXIS]+= FILAMENTCHANGE_FINALRETRACT ;
-                          
-
-                        plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 20, active_extruder);
+                        target[E_AXIS] += FILAMENTCHANGE_FINALRETRACT;
+                        plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS],
+                                         target[E_AXIS], FILAMENTCHANGE_EFEED_EJECT, active_extruder);
 
                         //finish moves
                         st_synchronize();
@@ -8680,22 +8671,10 @@ float temp_compensation_pinda_thermistor_offset(float temperature_pinda)
 void long_pause() //long pause print
 {
 	st_synchronize();
-	
+
 	start_pause_print = _millis();
 
-	//retract
-	current_position[E_AXIS] -= default_retraction;
-	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 400, active_extruder);
-
-	//lift z
-	current_position[Z_AXIS] += Z_PAUSE_LIFT;
-	if (current_position[Z_AXIS] > Z_MAX_POS) current_position[Z_AXIS] = Z_MAX_POS;
-	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 15, active_extruder);
-
-	//Move XY to side
-	current_position[X_AXIS] = X_PAUSE_POS;
-	current_position[Y_AXIS] = Y_PAUSE_POS;
-	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 50, active_extruder);
+    park_extruder(current_position, -default_retraction, Z_PAUSE_LIFT, X_PAUSE_POS, Y_PAUSE_POS);
 
 	// Turn off the print fan
 	fanSpeed = 0;
