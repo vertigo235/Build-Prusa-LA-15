@@ -2927,7 +2927,7 @@ void lcd_load_filament_color_check()
 	while (!clean) {
 		lcd_update_enable(true);
 		lcd_update(2);
-		load_filament_final_feed();
+		load_filament_final_feed(current_position);
 		st_synchronize();
 		clean = lcd_show_fullscreen_message_yes_no_and_wait_P(_T(MSG_FILAMENT_CLEAN), false, true);
 	}

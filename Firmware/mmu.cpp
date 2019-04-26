@@ -884,7 +884,7 @@ void mmu_M600_load_filament(bool automatic, float nozzle_temp)
     mmu_extruder = tmp_extruder; //filament change is finished
 
     mmu_load_to_nozzle();
-    load_filament_final_feed();
+    load_filament_final_feed(current_position);
     st_synchronize();
 }
 
@@ -1370,7 +1370,7 @@ void lcd_mmu_load_to_nozzle(uint8_t filament_nr)
         mmu_extruder = tmp_extruder; //filament change is finished
         mmu_load_to_nozzle();
         raise_z_above(MIN_Z_FOR_LOAD);
-        load_filament_final_feed();
+        load_filament_final_feed(current_position);
         st_synchronize();
         custom_message_type = CUSTOM_MSG_TYPE_F_LOAD;
         lcd_setstatuspgm(_T(MSG_LOADING_FILAMENT));

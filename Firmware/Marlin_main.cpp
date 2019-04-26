@@ -3177,6 +3177,29 @@ static void gcode_M600(bool automatic, float x_position, float y_position, float
 }
 
 
+// fast loading sequence
+void load_filament_first_feed(float* target)
+{
+    target[E_AXIS] += FILAMENTCHANGE_FIRSTFEED;
+    plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS],
+                     FILAMENTCHANGE_EFEED_FIRST, active_extruder);
+}
+
+// slow loading sequence
+void load_filament_final_feed(float* target)
+{
+	target[E_AXIS] += FILAMENTCHANGE_FINALFEED;
+	plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS],
+                     FILAMENTCHANGE_EFEED_FINAL, active_extruder);
+}
+
+void load_filament_full(float* target)
+{
+    load_filament_first_feed(target);
+    load_filament_final_feed(target);
+}
+
+
 void gcode_M701()
 {
 	printf_P(PSTR("gcode_M701 begin\n"));
@@ -3196,12 +3219,9 @@ void gcode_M701()
 #endif //FSENSOR_QUALITY
 
 		lcd_setstatuspgm(_T(MSG_LOADING_FILAMENT));
-		current_position[E_AXIS] += 40;
-		plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 400 / 60, active_extruder); //fast sequence
-		st_synchronize();
-
+		load_filament_first_feed(current_position);
 		raise_z_above(MIN_Z_FOR_LOAD);
-		load_filament_final_feed(); //slow sequence
+		load_filament_final_feed(current_position);
 		st_synchronize();
 
 		if((eSoundMode==e_SOUND_MODE_LOUD)||(eSoundMode==e_SOUND_MODE_ONCE)) _tone(BEEPER, 500);
@@ -3748,49 +3768,31 @@ if((eSoundMode==e_SOUND_MODE_LOUD)||(eSoundMode==e_SOUND_MODE_ONCE))
                         
                         WRITE(BEEPER,LOW);
                         
-                        target[E_AXIS]+= FILAMENTCHANGE_FIRSTFEED ;
-                        plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 20, active_extruder); 
-                        
-                        
-                        target[E_AXIS]+= FILAMENTCHANGE_FINALFEED ;
-                        plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 2, active_extruder); 
-                        
-                 
-                        
-                        
-                        
+                        load_filament_full(target);
+
                         lcd_change_fil_state = 0;
                         lcd_loading_filament();
                         while ((lcd_change_fil_state == 0)||(lcd_change_fil_state != 1)){
-                        
+
                           lcd_change_fil_state = 0;
                           lcd_alright();
                           switch(lcd_change_fil_state){
                           
                              case 2:
-                                     target[E_AXIS]+= FILAMENTCHANGE_FIRSTFEED ;
-                                     plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 20, active_extruder); 
-                        
-                        
-                                     target[E_AXIS]+= FILAMENTCHANGE_FINALFEED ;
-                                     plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 2, active_extruder); 
-                                      
-                                     
-                                     lcd_loading_filament();
-                                     break;
+                                 load_filament_full(target);
+                                 lcd_loading_filament();
+                                 break;
+
                              case 3:
-                                     target[E_AXIS]+= FILAMENTCHANGE_FINALFEED ;
-                                     plan_buffer_line(target[X_AXIS], target[Y_AXIS], target[Z_AXIS], target[E_AXIS], 2, active_extruder); 
-                                     lcd_loading_color();
-                                     break;
-                                          
+                                 load_filament_final_feed(target);
+                                 lcd_loading_color();
+                                 break;
+
                              default:
-                                     lcd_change_success();
-                                     break;
+                                 lcd_change_success();
+                                 break;
                           }
-                          
                         }
-                        
 
                         
                       target[E_AXIS]+= 5;
@@ -6626,7 +6628,8 @@ if((eSoundMode==e_SOUND_MODE_LOUD)||(eSoundMode==e_SOUND_MODE_ONCE))
           #endif
         }
 
-		//currently don't work as we are using the same unload sequence as in M702, needs re-work 
+		// L is parsed but ignored. Unloading is performed with the same
+		// code as M702 (using either extr_unload or unload_filament)
 		if (code_seen('L'))
 		{
 			e_shift_late = code_value();
@@ -9463,12 +9466,6 @@ static void print_time_remaining_init()
 	print_percent_done_silent = PRINT_PERCENT_DONE_INIT;
 }
 
-void load_filament_final_feed()
-{
-	current_position[E_AXIS]+= FILAMENTCHANGE_FINALFEED;
-	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], FILAMENTCHANGE_EFEED_FINAL, active_extruder);
-}
-
 //! @brief Wait for user to check the state
 //! @par nozzle_temp nozzle temperature to load filament
 void M600_check_state(float nozzle_temp)
@@ -9492,8 +9489,7 @@ void M600_check_state(float nozzle_temp)
 
         // Filament loaded properly but color is not clear
         case 3:
-            st_synchronize();
-            load_filament_final_feed();
+            load_filament_final_feed(current_position);
             lcd_loading_color();
             st_synchronize();
             break;
@@ -9610,10 +9606,9 @@ void M600_load_filament_movements()
 	current_position[E_AXIS] += 10;
 	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], 50, active_extruder);
 #else
-	current_position[E_AXIS]+= FILAMENTCHANGE_FIRSTFEED ;
-	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], FILAMENTCHANGE_EFEED_FIRST, active_extruder); 
-#endif                
-	load_filament_final_feed();
+    load_filament_first_feed(current_position);
+#endif
+	load_filament_final_feed(current_position);
 	lcd_loading_filament();
 	st_synchronize();
 }
