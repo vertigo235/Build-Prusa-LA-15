@@ -340,6 +340,7 @@
 #define FILAMENTCHANGE_FINALFEED 25 // E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701)
 
 #define FILAMENTCHANGE_RESUMEFEED 5 // E priming distance performed after resuming
+#define FILAMENTCHANGE_UNLOADFEED 5 // E priming distance performed before unloading
 
 #define FILAMENTCHANGE_XYFEED        150         // XY feedrate for parking the extruder (mm/s, max_feedrate_x / 20)
 #define FILAMENTCHANGE_ZFEED         12          // Z feedrate for parking the xtruder (mm/s, max_feedrate_z)
