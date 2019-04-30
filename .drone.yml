@@ -26,6 +26,8 @@ steps:
       - chmod +x lang/lang-clean.sh
       - bash -x PF-build.sh 1_75mm_MK3S-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BEAR-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-BEAR-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
@@ -64,9 +66,9 @@ steps:
       - ls
       - wget https://raw.githubusercontent.com/nato2k/Skelestruder_Firmware_Patch/master/skele_patch.py
       - python skele_patch.py
-      - cp ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-EINSy10a-E3Dv6full.h ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-Skelestruder-EINSy10a-E3Dv6full.h
+      - cp ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-EINSy10a-E3Dv6full.h ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-Skelestruder-16-EINSy10a-E3Dv6full.h
       - cd $CI_WORKSPACE
-      - bash -x PF-build.sh 1_75mm_MK3-Skelestruder-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3-Skelestruder-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
     when:
       event:
        - push
