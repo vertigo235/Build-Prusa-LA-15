@@ -26,8 +26,6 @@ steps:
       - chmod +x lang/lang-clean.sh
       - bash -x PF-build.sh 1_75mm_MK3S-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BEAR-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-BEAR-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
@@ -46,6 +44,10 @@ steps:
       - bash -x PF-build.sh 1_75mm_MK25S-BMG-.9-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-BMG-1.8-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-BMG-1.8-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
+      - git apply Firmware/variants/mmu2s-more-load-4mm.patch
+      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - git reset --hard
     when:
       event:
        - push
