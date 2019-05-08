@@ -24,6 +24,7 @@ steps:
       - chmod +x lang/config.sh
       - chmod +x lang/fw-clean.sh
       - chmod +x lang/lang-clean.sh
+      - sed -i -e 's/#define FW_COMMIT_NR   [0-9]*/#define FW_COMMIT_NR  '"$DRONE_BUILD_STARTED"'/' Firmware/Configuration.h
       - bash -x PF-build.sh 1_75mm_MK3S-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BEAR-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
@@ -45,7 +46,6 @@ steps:
       - git apply Firmware/variants/mmu2s-more-load-4mm.patch
       - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      - git reset --hard
     when:
       event:
        - push
