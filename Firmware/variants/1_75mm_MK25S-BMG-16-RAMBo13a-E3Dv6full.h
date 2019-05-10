@@ -7,7 +7,7 @@
  *------------------------------------*/
 
 // Printer revision
-#define PRINTER_TYPE PRINTER_MK25
+#define PRINTER_TYPE PRINTER_MK25S
 #define FILAMENT_SIZE "1_75mm_MK25"
 #define NOZZLE_TYPE "E3Dv6full"
 
@@ -15,10 +15,10 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5 BEAR"
+#define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5S BMG 1.8"
 
 // Electronics
-#define MOTHERBOARD BOARD_RAMBO_MINI_1_0
+#define MOTHERBOARD BOARD_RAMBO_MINI_1_3
 
 #define HEATBED_V2
 #define STEEL_SHEET
@@ -36,7 +36,7 @@
  *------------------------------------*/
 
 // Steps per unit {X,Y,Z,E}
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,133}
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,415}
 
 // Endstop inverting
 #define X_MIN_ENDSTOP_INVERTING 0 // set to 1 to invert the logic of the endstop.
@@ -73,7 +73,7 @@
 //                                                The correct value for a MK3S extruder is 9.0, for all other printers choose 2.0.
 
 // This is only relevant for "S" firmware and an extruder like the Bondtech BMG or Bear extruders.
-#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for MK2.5, Bear and BMG (not MK2.5S) extruder 
+#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for MK2.5 and BMG (not MK2.5S) extruder 
 
 // Canceled home position
 #define X_CANCEL_POS 50
@@ -101,6 +101,7 @@
 #define DEFAULT_MAX_ACCELERATION      {1000, 1000, 200, 5000}  // (mm/sec^2) max acceleration (M201)
 #define DEFAULT_MAX_ACCELERATION_SILENT     {960, 960, 200, 5000}    // (mm/sec^2) max acceleration (M201), silent mode
 
+
 #define DEFAULT_ACCELERATION          1250   // X, Y, Z and E max acceleration in mm/s^2 for printing moves (M204S)
 #define DEFAULT_RETRACT_ACCELERATION  1250   // X, Y, Z and E max acceleration in mm/s^2 for retracts (M204T)
 
@@ -126,7 +127,7 @@
 
 // Filament sensor
 #define FILAMENT_SENSOR
-#define PAT9125
+#define IR_SENSOR
 
 
 #define DEBUG_DCODE3
@@ -224,12 +225,12 @@
 
 // Load filament commands
 #define LOAD_FILAMENT_0 "M83"
-#define LOAD_FILAMENT_1 "G1 E70 F400"
+#define LOAD_FILAMENT_1 "G1 E80 F400"
 #define LOAD_FILAMENT_2 "G1 E40 F100"
 
 // Unload filament commands
 #define UNLOAD_FILAMENT_0 "M83"
-#define UNLOAD_FILAMENT_1 "G1 E-80 F7000"
+#define UNLOAD_FILAMENT_1 "G1 E-95 F5000"
 
 /*------------------------------------
  CHANGE FILAMENT SETTINGS
@@ -242,9 +243,9 @@
 #define FILAMENTCHANGE_YPOS 0
 #define FILAMENTCHANGE_ZADD 2
 #define FILAMENTCHANGE_FIRSTRETRACT -2
-#define FILAMENTCHANGE_FINALRETRACT -80
+#define FILAMENTCHANGE_FINALRETRACT -95
 
-#define FILAMENTCHANGE_FIRSTFEED 70 //E distance in mm for fast filament loading sequence used used in filament change (M600)
+#define FILAMENTCHANGE_FIRSTFEED 95 //E distance in mm for fast filament loading sequence used used in filament change (M600)
 #define FILAMENTCHANGE_FINALFEED 25 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
 #define FILAMENTCHANGE_RECFEED 5
 
@@ -252,7 +253,7 @@
 #define FILAMENTCHANGE_EFEED_FIRST 20 // feedrate in mm/s for fast filament loading sequence used in filament change (M600)
 #define FILAMENTCHANGE_EFEED_FINAL 3.3f // feedrate in mm/s for slow filament loading sequence used in filament change (M600) and filament load (M701) 
 //#define FILAMENTCHANGE_RFEED 400
-#define FILAMENTCHANGE_RFEED 7000 / 60
+#define FILAMENTCHANGE_RFEED 2500 / 60
 #define FILAMENTCHANGE_EXFEED 2
 #define FILAMENTCHANGE_ZFEED 15
 

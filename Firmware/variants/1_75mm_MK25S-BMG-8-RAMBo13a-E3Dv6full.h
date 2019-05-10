@@ -18,7 +18,7 @@
 #define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5S BMG .9"
 
 // Electronics
-#define MOTHERBOARD BOARD_RAMBO_MINI_1_0
+#define MOTHERBOARD BOARD_RAMBO_MINI_1_3
 
 #define HEATBED_V2
 #define STEEL_SHEET
@@ -114,6 +114,9 @@
 
 // New XYZ calibration
 #define NEW_XYZCAL
+
+// Watchdog support
+#define WATCHDOG
 
 // Fan check
 #define FANCHECK
