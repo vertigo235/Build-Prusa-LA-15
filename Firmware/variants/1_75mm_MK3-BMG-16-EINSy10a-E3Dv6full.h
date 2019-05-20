@@ -7,7 +7,7 @@
  *------------------------------------*/
 
 // Printer revision
-#define PRINTER_TYPE PRINTER_MK3S
+#define PRINTER_TYPE PRINTER_MK3
 #define FILAMENT_SIZE "1_75mm_MK3"
 #define NOZZLE_TYPE "E3Dv6full"
 
@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK3S"
+#define CUSTOM_MENDEL_NAME "Prusa i3 MK3 BMG 16"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
@@ -36,7 +36,7 @@
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,830}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
 
 // Endstop inverting
@@ -72,8 +72,9 @@
 //                                                The Prusa settings only seem correct for MK3 and MK3S firmware.
 //
 //                                                The correct value for a MK3S extruder is 9.0, for all other printers choose 2.0.
+
 // This is only relevant for "S" firmware and an extruder like the Bondtech BMG or Bear extruders.
-#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 9.0 // This represents the correction as needed for MK3S extruder 
+#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for a non MK3S extruder 
 
 // Canceled home position
 #define X_CANCEL_POS 50
@@ -144,7 +145,7 @@
 
 // Filament sensor
 #define FILAMENT_SENSOR
-#define IR_SENSOR
+#define PAT9125
 
 // Backlash - 
 //#define BACKLASH_X
@@ -212,7 +213,7 @@
 
 #define TMC2130_USTEPS_XY   16        // microstep resolution for XY axes
 #define TMC2130_USTEPS_Z    16        // microstep resolution for Z axis
-#define TMC2130_USTEPS_E    32        // microstep resolution for E axis
+#define TMC2130_USTEPS_E    16        // microstep resolution for E axis
 #define TMC2130_INTPOL_XY   1         // extrapolate 256 for XY axes
 #define TMC2130_INTPOL_Z    1         // extrapolate 256 for Z axis
 #define TMC2130_INTPOL_E    1         // extrapolate 256 for E axis
@@ -268,6 +269,7 @@
 //new settings is possible for vsense = 1, running current value > 31 set vsense to zero and shift both currents by 1 bit right (Z axis only)
 #define TMC2130_CURRENTS_H {16, 20, 35, 30}  // default holding currents for all axes
 #define TMC2130_CURRENTS_R {16, 20, 35, 30}  // default running currents for all axes
+#define TMC2130_UNLOAD_CURRENT_R 20			 // lowe current for M600 to protect filament sensor 
 
 #define TMC2130_STEALTH_Z
 
@@ -332,6 +334,20 @@
 #define EXTRUDER_AUTO_FAN_SPEED   255  // == full speed
 
 
+
+/*------------------------------------
+ LOAD/UNLOAD FILAMENT SETTINGS
+ *------------------------------------*/
+
+// Load filament commands
+#define LOAD_FILAMENT_0 "M83"
+#define LOAD_FILAMENT_1 "G1 E70 F400"
+#define LOAD_FILAMENT_2 "G1 E50 F100"
+
+// Unload filament commands
+#define UNLOAD_FILAMENT_0 "M83"
+#define UNLOAD_FILAMENT_1 "G1 E-100 F7000"
+
 /*------------------------------------
  CHANGE FILAMENT SETTINGS
  *------------------------------------*/
@@ -341,24 +357,21 @@
 #ifdef FILAMENTCHANGEENABLE
 #define FILAMENTCHANGE_XPOS 211
 #define FILAMENTCHANGE_YPOS 0
-#define FILAMENTCHANGE_ZADD Z_PAUSE_LIFT
+#define FILAMENTCHANGE_ZADD 2
+#define FILAMENTCHANGE_FIRSTRETRACT -2
+#define FILAMENTCHANGE_FINALRETRACT -100
 
-#define FILAMENTCHANGE_FIRSTRETRACT -2   // Retraction performed before parking the extruder or unloading filament
-#define FILAMENTCHANGE_FINALRETRACT -80  // Full filament retraction length
+#define FILAMENTCHANGE_FIRSTFEED 70 //E distance in mm for fast filament loading sequence used used in filament change (M600)
+#define FILAMENTCHANGE_FINALFEED 35 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
+#define FILAMENTCHANGE_RECFEED 5
 
-#define FILAMENTCHANGE_FIRSTFEED 70 // E distance in mm for fast filament loading sequence used used in filament change (M600)
-#define FILAMENTCHANGE_FINALFEED 25 // E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701)
-
-#define FILAMENTCHANGE_RESUMEFEED 5 // E priming distance performed after resuming
-#define FILAMENTCHANGE_UNLOADFEED 5 // E priming distance performed before unloading
-
-#define FILAMENTCHANGE_XYFEED        150         // XY feedrate for parking the extruder (mm/s, max_feedrate_x / 20)
-#define FILAMENTCHANGE_ZFEED         12          // Z feedrate for parking the xtruder (mm/s, max_feedrate_z)
-#define FILAMENTCHANGE_EFEED_FIRST   (1000 / 60) // feedrate in mm/s for fast filament loading sequence used in filament change (M600)
-#define FILAMENTCHANGE_EFEED_FINAL   ( 120 / 60) // feedrate in mm/s for slow filament loading sequence used in filament change (M600) and filament load (M701)
-#define FILAMENTCHANGE_EFEED_RETRACT (2100 / 60) // quick filament retract feedrate in mm/s
-#define FILAMENTCHANGE_EFEED_EJECT   (1000 / 60) // filament ejection feedrate in mm/s
-#define FILAMENTCHANGE_EFEED_PRIME   ( 120 / 60) // filament priming feedrate (used before unloading and after resuming a print)
+#define FILAMENTCHANGE_XYFEED 50
+#define FILAMENTCHANGE_EFEED_FIRST 20 // feedrate in mm/s for fast filament loading sequence used in filament change (M600)
+#define FILAMENTCHANGE_EFEED_FINAL 3.3f // feedrate in mm/s for slow filament loading sequence used in filament change (M600) and filament load (M701) 
+//#define FILAMENTCHANGE_RFEED 400
+#define FILAMENTCHANGE_RFEED 7000 / 60
+#define FILAMENTCHANGE_EXFEED 2
+#define FILAMENTCHANGE_ZFEED 15
 
 #endif
 
