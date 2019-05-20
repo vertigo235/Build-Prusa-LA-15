@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK3S"
+#define CUSTOM_MENDEL_NAME "Prusa i3 MK3S BEAR"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
@@ -72,8 +72,9 @@
 //                                                The Prusa settings only seem correct for MK3 and MK3S firmware.
 //
 //                                                The correct value for a MK3S extruder is 9.0, for all other printers choose 2.0.
+
 // This is only relevant for "S" firmware and an extruder like the Bondtech BMG or Bear extruders.
-#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 9.0 // This represents the correction as needed for MK3S extruder 
+#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for MK2.5, Bear and BMG (not MK2.5S) extruder 
 
 // Canceled home position
 #define X_CANCEL_POS 50
@@ -200,7 +201,7 @@
 #define LINEARITY_CORRECTION
 #define TMC2130_LINEARITY_CORRECTION
 #define TMC2130_LINEARITY_CORRECTION_XYZ
-#define TMC2130_VARIABLE_RESOLUTION
+//#define TMC2130_VARIABLE_RESOLUTION
 
 
 
