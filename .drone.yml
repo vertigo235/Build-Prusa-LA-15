@@ -34,9 +34,9 @@ steps:
       - bash -x PF-build.sh 1_75mm_MK25S-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-BEAR-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK25-BEAR-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
+      #- bash -x PF-build.sh 1_75mm_MK25-BEAR-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK25-BEAR-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
+      #- bash -x PF-build.sh 1_75mm_MK25-BEAR-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-BMG-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-BMG-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BMG-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
