@@ -3633,6 +3633,10 @@ calibrated:
 	if ((PRINTER_TYPE == PRINTER_MK25) || (PRINTER_TYPE == PRINTER_MK2) || (PRINTER_TYPE == PRINTER_MK2_SNMM)) {
 		current_position[Z_AXIS] = Z_MAX_POS-3.f;
 	}
+	else if ((PRINTER_TYPE == PRINTER_MK25S) && (Z_MAX_POS_XYZ_CALIBRATION_CORRECTION == 2.0))
+	{
+		current_position[Z_AXIS] = Z_MAX_POS-3.f;
+	}
 	else {
 		current_position[Z_AXIS] = Z_MAX_POS+4.f;
 	}
