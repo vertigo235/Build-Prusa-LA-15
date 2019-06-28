@@ -66,12 +66,10 @@ steps:
       - pwd
       - ls
       - wget https://raw.githubusercontent.com/nato2k/Skelestruder_Firmware_Patch/master/skele_patch.py
-      - python skele_patch.py
+      - python skele_patch.py 490 16
       - cp ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-EINSy10a-E3Dv6full.h ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-Skelestruder-16-EINSy10a-E3Dv6full.h
       - cd $CI_WORKSPACE
-      - sed 's/#define TMC2130_USTEPS_E    16/#define TMC2130_USTEPS_E    8 /' Firmware/variants/1_75mm_MK3-Skelestruder-16-EINSy10a-E3Dv6full.h > Firmware/variants/1_75mm_MK3-Skelestruder-8-EINSy10a-E3Dv6full.h
       - bash -x PF-build.sh 1_75mm_MK3-Skelestruder-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK3-Skelestruder-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
     when:
       event:
        - push
