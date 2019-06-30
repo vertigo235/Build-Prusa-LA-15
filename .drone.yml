@@ -41,7 +41,7 @@ steps:
       #- bash -x PF-build.sh 1_75mm_MK3-BMG-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BMG-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       #- bash -x PF-build.sh 1_75mm_MK3S-BMG-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      #- bash -x PF-build.sh 1_75mm_MK3S-320Z-BMG-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-320Z-BMG-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-BMG-16-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-BMG-16-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - git apply Firmware/variants/mmu2s-more-load-4mm.patch
