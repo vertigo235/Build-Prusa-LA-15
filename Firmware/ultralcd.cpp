@@ -116,6 +116,7 @@ static void lcd_status_screen();
 static void lcd_language_menu();
 static void lcd_main_menu();
 static void lcd_tune_menu();
+static void lcd_led_menu();
 //static void lcd_move_menu();
 static void lcd_settings_menu();
 static void lcd_calibration_menu();
@@ -2227,6 +2228,21 @@ static void lcd_preheat_menu()
   }
   
 
+  MENU_END();
+}
+
+static void lcd_led_menu()
+{
+  MENU_BEGIN();
+
+  MENU_ITEM_BACK_P(_T(MSG_MAIN));{
+   
+  MENU_ITEM_GCODE_P(_i("Light off"), PSTR("M42 P5 S0"));////MSG_LED_OFF 
+  MENU_ITEM_GCODE_P(_i("Light 25%"), PSTR("M42 P5 S64"));////MSG_LED_25
+  MENU_ITEM_GCODE_P(_i("Light 50%"), PSTR("M42 P5 S127"));////MSG_LED_50
+  MENU_ITEM_GCODE_P(_i("Light 75%"), PSTR("M42 P5 S190"));////MSG_LED_75
+  MENU_ITEM_GCODE_P(_i("Light 100%"), PSTR("M42 P5 S255"));////MSG_LED_100
+  }
   MENU_END();
 }
 
@@ -6384,6 +6400,7 @@ static void lcd_test_menu()
 void lcd_resume_print()
 {
     lcd_return_to_status();
+		lcd_reset_alert_level();
     lcd_setstatuspgm(_T(MSG_RESUMING_PRINT));
     lcd_reset_alert_level(); //for fan speed error
     restore_print_from_ram_and_continue(0.0);
@@ -6468,6 +6485,7 @@ static void lcd_main_menu()
 	MENU_ITEM_SUBMENU_P(_T(MSG_BABYSTEP_Z), lcd_babystep_z);//8
   }
 
+    MENU_ITEM_SUBMENU_P(_i("Light"), lcd_led_menu);////MSG_LED
 
   if ( moves_planned() || IS_SD_PRINTING || is_usb_printing || (lcd_commands_type == LCD_COMMAND_V2_CAL))
   {
@@ -6489,7 +6507,14 @@ static void lcd_main_menu()
 			}
 			else
 			{
-			    MENU_ITEM_SUBMENU_P(_i("Resume print"), lcd_resume_print);////MSG_RESUME_PRINT
+				#ifdef FANCHECK
+					checkFanSpeed(); //Check manually to get most recent fan speed status
+					if(fan_check_error == EFCE_OK)
+							MENU_ITEM_SUBMENU_P(_i("Resume print"), lcd_resume_print);////MSG_RESUME_PRINT
+				#else
+					MENU_ITEM_SUBMENU_P(_i("Resume print"), lcd_resume_print);////MSG_RESUME_PRINT
+				#endif
+
 			}
 			MENU_ITEM_SUBMENU_P(_T(MSG_STOP_PRINT), lcd_sdcard_stop);
 		}
