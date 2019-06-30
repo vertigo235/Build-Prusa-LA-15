@@ -558,7 +558,7 @@ void fsensor_enque_M600(){
 	// 8bit arithmetics in fsensor_clamp_z is 10B shorter than 16bit (not talking about float ;) ) 
 	// The compile-time static_assert here ensures, that the computation gets enough bits in case of Z-range too high,
 	// i.e. makes the user change the data type, which also results in larger code
-	static_assert(Z_MAX_POS < (255 - FILAMENTCHANGE_ZADD), "Z-range too high, change fsensor_clamp_z<uint8_t> to <uint16_t>");
+	static_assert(Z_MAX_POS < (Z_MAX_POS + 45 - FILAMENTCHANGE_ZADD), "Z-range too high, change fsensor_clamp_z<uint8_t> to <uint16_t>");
 	sprintf_P(buf, gcodeMove, fsensor_clamp_z<uint8_t>(current_position[Z_AXIS]) );
 	enquecommand_front(buf, false);
 }
