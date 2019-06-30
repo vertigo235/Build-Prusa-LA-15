@@ -6,7 +6,7 @@ workspace:
 
 steps:
   - name: tests
-    image: vertigo235/cmake
+    image: vertigo235/fw-build
     commands:
       - bash -x test.sh
     when:
@@ -16,7 +16,7 @@ steps:
         - pull_request
   
   - name: build
-    image: vertigo235/cmake
+    image: vertigo235/fw-build
     environment:
       BUILD_TYPE: GOLD
     commands:
