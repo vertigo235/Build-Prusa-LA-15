@@ -7,7 +7,7 @@
  *------------------------------------*/
 
 // Printer revision
-#define PRINTER_TYPE PRINTER_MK25S
+#define PRINTER_TYPE PRINTER_MK25
 #define FILAMENT_SIZE "1_75mm_MK25"
 #define NOZZLE_TYPE "E3Dv6full"
 
@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5S BEAR"
+#define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5 BPE"
 
 // Electronics
 #define MOTHERBOARD BOARD_RAMBO_MINI_1_0
@@ -36,7 +36,7 @@
  *------------------------------------*/
 
 // Steps per unit {X,Y,Z,E}
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,133}
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,415}
 
 // Endstop inverting
 #define X_MIN_ENDSTOP_INVERTING 0 // set to 1 to invert the logic of the endstop.
@@ -73,7 +73,7 @@
 //                                                The correct value for a MK3S extruder is 9.0, for all other printers choose 2.0.
 
 // This is only relevant for "S" firmware and an extruder like the Bondtech BMG or Bear extruders.
-#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for a MK2.5S extruder 
+#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for a non MK3S extruder 
 
 // Canceled home position
 #define X_CANCEL_POS 50
@@ -128,7 +128,7 @@
 
 // Filament sensor
 #define FILAMENT_SENSOR
-#define IR_SENSOR
+#define PAT9125
 
 
 #define DEBUG_DCODE3
@@ -227,11 +227,11 @@
 // Load filament commands
 #define LOAD_FILAMENT_0 "M83"
 #define LOAD_FILAMENT_1 "G1 E70 F400"
-#define LOAD_FILAMENT_2 "G1 E40 F100"
+#define LOAD_FILAMENT_2 "G1 E50 F100"
 
 // Unload filament commands
 #define UNLOAD_FILAMENT_0 "M83"
-#define UNLOAD_FILAMENT_1 "G1 E-80 F7000"
+#define UNLOAD_FILAMENT_1 "G1 E-100 F7000"
 
 /*------------------------------------
  CHANGE FILAMENT SETTINGS
@@ -244,10 +244,10 @@
 #define FILAMENTCHANGE_YPOS 0
 #define FILAMENTCHANGE_ZADD 2
 #define FILAMENTCHANGE_FIRSTRETRACT -2
-#define FILAMENTCHANGE_FINALRETRACT -80
+#define FILAMENTCHANGE_FINALRETRACT -100
 
 #define FILAMENTCHANGE_FIRSTFEED 70 //E distance in mm for fast filament loading sequence used used in filament change (M600)
-#define FILAMENTCHANGE_FINALFEED 25 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
+#define FILAMENTCHANGE_FINALFEED 35 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
 #define FILAMENTCHANGE_RECFEED 5
 
 #define FILAMENTCHANGE_XYFEED 50
@@ -518,13 +518,9 @@
 #define MMU_DEBUG //print communication between MMU2 and printer on serial
 //#define MMU_HAS_CUTTER
 
-// This is experimental feature requested by our test department.
-// There is no known use for ordinary user. If enabled by this macro
-// and enabled from printer menu (not enabled by default). It cuts filament
-// every time when switching filament from gcode. MMU_HAS_CUTTER needs to be
-// defined.
-
-//#define MMU_ALWAYS_CUT
 #define MMU_IDLER_SENSOR_ATTEMPTS_NR 21 //max. number of attempts to load filament if first load failed; value for max bowden length and case when loading fails right at the beginning
+
+//#define HEATBED_ANALYSIS //for meash bed leveling and heatbed analysis D-codes D80 and D81
+//#define MICROMETER_LOGGING //related to D-codes D80 and D81, currently works on MK2.5 only (MK3 board pin definitions missing)
 
 #endif //__CONFIGURATION_PRUSA_H

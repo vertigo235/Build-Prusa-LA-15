@@ -27,26 +27,27 @@ steps:
       - sed -i -e 's/#define FW_COMMIT_NR   [0-9]*/#define FW_COMMIT_NR  '"$DRONE_BUILD_STARTED"'/' Firmware/Configuration.h
       - bash -x PF-build.sh 1_75mm_MK3S-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BEAR-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-Bondtech-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-320Z-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-Bondtech-320Z-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-320Z-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3-Bondtech-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3-BEAR-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3-320Z-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3-Bondtech-320Z-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK25S-BEAR-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK25S-BEAR-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25S-BEAR-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK25S-Bondtech-16-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK25S-Bondtech-16-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK25-BEAR-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK25-BEAR-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK25-BEAR-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK3-BMG-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      #- bash -x PF-build.sh 1_75mm_MK3-BMG-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK3S-BMG-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      #- bash -x PF-build.sh 1_75mm_MK3S-BMG-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK3S-320Z-BMG-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK25S-BMG-16-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
-      - bash -x PF-build.sh 1_75mm_MK25S-BMG-16-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
-      - git apply Firmware/variants/mmu2s-more-load-4mm.patch
-      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
-      #- bash -x PF-build.sh 1_75mm_MK3S-BEAR-Gearbox-8-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK25-Bondtech-16-RAMBo13a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK25-Bondtech-16-RAMBo10a-E3Dv6full.h ALL $BUILD_TYPE
     when:
       event:
        - push
