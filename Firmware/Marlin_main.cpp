@@ -387,7 +387,6 @@ static uint16_t saved_feedrate2 = 0; //!< Default feedrate (truncated from float
 static int saved_feedmultiply2 = 0;
 static uint8_t saved_active_extruder = 0;
 static float saved_extruder_temperature = 0.0; //!< Active extruder temperature
-static bool saved_extruder_under_pressure = false;
 static bool saved_extruder_relative_mode = false;
 static int saved_fanSpeed = 0; //!< Print fan speed
 //! @}
@@ -2069,35 +2068,23 @@ static float probe_pt(float x, float y, float z_before) {
 
 #ifdef LIN_ADVANCE
    /**
-    * M900: Set and/or Get advance K factor and WH/D ratio
+    * M900: Set and/or Get advance K factor
     *
     *  K<factor>                  Set advance K factor
-    *  R<ratio>                   Set ratio directly (overrides WH/D)
-    *  W<width> H<height> D<diam> Set ratio from WH/D
     */
 inline void gcode_M900() {
     st_synchronize();
     
     const float newK = code_seen('K') ? code_value_float() : -1;
-    if (newK >= 0) extruder_advance_k = newK;
-    
-    float newR = code_seen('R') ? code_value_float() : -1;
-    if (newR < 0) {
-        const float newD = code_seen('D') ? code_value_float() : -1,
-        newW = code_seen('W') ? code_value_float() : -1,
-        newH = code_seen('H') ? code_value_float() : -1;
-        if (newD >= 0 && newW >= 0 && newH >= 0)
-            newR = newD ? (newW * newH) / (sq(newD * 0.5) * M_PI) : 0;
-    }
-    if (newR >= 0) advance_ed_ratio = newR;
-    
+    if (newK >= 0 && newK < 10)
+      extruder_advance_K = newK;
+    else
+      SERIAL_ECHOLNPGM("K out of allowed range!");
+
     SERIAL_ECHO_START;
     SERIAL_ECHOPGM("Advance K=");
-    SERIAL_ECHOLN(extruder_advance_k);
-    SERIAL_ECHOPGM(" E/D=");
-    const float ratio = advance_ed_ratio;
-    if (ratio) SERIAL_ECHOLN(ratio); else SERIAL_ECHOLNPGM("Auto");
-    }
+    SERIAL_ECHOLN(extruder_advance_K);
+}
 #endif // LIN_ADVANCE
 
 bool check_commands() {
@@ -7886,14 +7873,7 @@ Sigma_Exit:
           else
           {
 #ifdef SNMM
-
-#ifdef LIN_ADVANCE
-              if (mmu_extruder != tmp_extruder)
-                  clear_current_adv_vars(); //Check if the selected extruder is not the active one and reset LIN_ADVANCE variables if so.
-#endif
-
               mmu_extruder = tmp_extruder;
-
 
               _delay(100);
 
@@ -9717,6 +9697,9 @@ void uvlo_()
 #endif
 #endif
 	eeprom_update_word((uint16_t*)(EEPROM_EXTRUDEMULTIPLY), (uint16_t)extrudemultiply);
+#ifdef LIN_ADVANCE
+	eeprom_update_float((float*)(EEPROM_UVLO_LA_K), extruder_advance_K);
+#endif
     // Store the saved target
     eeprom_update_float((float*)(EEPROM_UVLO_SAVED_TARGET+0*4), saved_target[X_AXIS]);
     eeprom_update_float((float*)(EEPROM_UVLO_SAVED_TARGET+1*4), saved_target[Y_AXIS]);
@@ -9970,6 +9953,9 @@ void recover_machine_state_after_power_panic(bool bTiny)
 #endif
 #endif
   extrudemultiply = (int)eeprom_read_word((uint16_t*)(EEPROM_EXTRUDEMULTIPLY));
+#ifdef LIN_ADVANCE
+  extruder_advance_K = eeprom_read_float((float*)EEPROM_UVLO_LA_K);
+#endif
 
   // 9) Recover the saved target
   saved_target[X_AXIS] = eeprom_read_float((float*)(EEPROM_UVLO_SAVED_TARGET+0*4));
@@ -10207,8 +10193,6 @@ void stop_and_save_print_to_ram(float z_move, float e_move)
     saved_feedmultiply2 = feedmultiply; //save feedmultiply
 	saved_active_extruder = active_extruder; //save active_extruder
 	saved_extruder_temperature = degTargetHotend(active_extruder);
-
-	saved_extruder_under_pressure = extruder_under_pressure; //extruder under pressure flag - currently unused
 	saved_extruder_relative_mode = axis_relative_modes[E_AXIS];
 	saved_fanSpeed = fanSpeed;
 	cmdqueue_reset(); //empty cmdqueue

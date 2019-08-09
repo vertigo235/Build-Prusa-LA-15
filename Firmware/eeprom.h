@@ -203,6 +203,7 @@ static Sheets * const EEPROM_Sheets_base = (Sheets*)(EEPROM_SHEETS_BASE);
 
 #define EEPROM_FSENSOR_PCB (EEPROM_SHEETS_BASE-1) // uint8
 #define EEPROM_FSENSOR_ACTION_NA (EEPROM_FSENSOR_PCB-1) // uint8
+#define EEPROM_UVLO_LA_K (EEPROM_MMU_STEALTH-4) // float
 
 #define EEPROM_UVLO_SAVED_TARGET (EEPROM_FSENSOR_ACTION_NA - 4*4) // 4 x float for saved target for all axes
 #define EEPROM_UVLO_FEEDMULTIPLY (EEPROM_UVLO_SAVED_TARGET - 2) // uint16_t for feedmultiply
