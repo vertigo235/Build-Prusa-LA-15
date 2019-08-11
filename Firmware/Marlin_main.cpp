@@ -2127,12 +2127,16 @@ bool calibrate_z_auto()
 	plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate / 60, active_extruder);
 	st_synchronize();
 	enable_endstops(endstops_enabled);
+#ifdef Z_MAX_POS_XYZ_CALIBRATION_CORRECTION
+    current_position[Z_AXIS] = Z_MAX_POS + Z_MAX_POS_XYZ_CALIBRATION_CORRECTION;
+#else   
 	if (PRINTER_TYPE == PRINTER_MK3) {
 		current_position[Z_AXIS] = Z_MAX_POS + 2.0;
 	}
 	else {
 		current_position[Z_AXIS] = Z_MAX_POS + 9.0;
 	}
+#endif //Z_MAX_POS_XYZ_CALIBRATION_CORRECTION
     plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
 	return true;
 }
@@ -2992,7 +2996,7 @@ template<typename T>
 static T gcode_M600_filament_change_z_shift()
 {
 #ifdef FILAMENTCHANGE_ZADD
-	static_assert(Z_MAX_POS < (255 - FILAMENTCHANGE_ZADD), "Z-range too high, change the T type from uint8_t to uint16_t");
+	static_assert(Z_MAX_POS < (Z_MAX_POS + 45 - FILAMENTCHANGE_ZADD), "Z-range too high, change the T type from uint8_t to uint16_t");
 	// avoid floating point arithmetics when not necessary - results in shorter code
 	T ztmp = T( current_position[Z_AXIS] );
 	T z_shift = 0;
