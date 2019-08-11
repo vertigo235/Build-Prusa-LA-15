@@ -2,16 +2,17 @@
 #define CONFIGURATION_PRUSA_H
 
 #include <limits.h>
+//-//
 #include "printers.h"
 /*------------------------------------
  GENERAL SETTINGS
  *------------------------------------*/
 
 // Printer revision
-#define PRINTER_TYPE PRINTER_MK3S
-#define PRINTER_NAME PRINTER_MK3S_NAME
-#define PRINTER_MMU_TYPE PRINTER_MK3S_MMU2
-#define PRINTER_MMU_NAME PRINTER_MK3S_MMU2_NAME
+#define PRINTER_TYPE PRINTER_MK3
+#define PRINTER_NAME PRINTER_MK3_NAME
+#define PRINTER_MMU_TYPE PRINTER_MK3_MMU2
+#define PRINTER_MMU_NAME PRINTER_MK3_MMU2_NAME
 #define FILAMENT_SIZE "1_75mm_MK3"
 #define NOZZLE_TYPE "E3Dv6full"
 
@@ -19,15 +20,12 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK3S"
+#define CUSTOM_MENDEL_NAME "Prusa i3 MK3 BEAR"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
 #define STEEL_SHEET
 #define HAS_SECOND_SERIAL_PORT
-
-// PSU
-#define PSU_Delta                                 // uncomment if DeltaElectronics PSU installed
 
 
 // Uncomment the below for the E3D PT100 temperature sensor (with or without PT100 Amplifier)
@@ -79,8 +77,9 @@
 //                                                The Prusa settings only seem correct for MK3 and MK3S firmware.
 //
 //                                                The correct value for a MK3S extruder is 9.0, for all other printers choose 2.0.
+
 // This is only relevant for "S" firmware and an extruder like the Bondtech BMG or Bear extruders.
-#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 9.0 // This represents the correction as needed for MK3S extruder 
+#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for a non MK3S extruder 
 
 // Canceled home position
 #define X_CANCEL_POS 50
@@ -152,7 +151,7 @@
 
 // Filament sensor
 #define FILAMENT_SENSOR
-#define IR_SENSOR
+#define PAT9125
 
 // Backlash - 
 //#define BACKLASH_X
@@ -434,7 +433,7 @@
 #define BED_ADJUSTMENT_UM_MAX 100
 
 #define MESH_HOME_Z_CALIB 0.2
-#define MESH_HOME_Z_SEARCH 5.0f           // Z lift for homing, mesh bed leveling etc.
+#define MESH_HOME_Z_SEARCH 5 //Z lift for homing, mesh bed leveling etc.
 
 #define X_PROBE_OFFSET_FROM_EXTRUDER 23     // Z probe to nozzle X offset: -left  +right
 #define Y_PROBE_OFFSET_FROM_EXTRUDER 5     // Z probe to nozzle Y offset: -front +behind
@@ -504,10 +503,6 @@
 #define PLA_PREHEAT_HOTEND_TEMP 215
 #define PLA_PREHEAT_HPB_TEMP 60
 #define PLA_PREHEAT_FAN_SPEED 0
-
-#define ASA_PREHEAT_HOTEND_TEMP 260
-#define ASA_PREHEAT_HPB_TEMP 105
-#define ASA_PREHEAT_FAN_SPEED 0
 
 #define ABS_PREHEAT_HOTEND_TEMP 255
 #define ABS_PREHEAT_HPB_TEMP 100
@@ -649,14 +644,6 @@
 #define MMU_HWRESET
 #define MMU_DEBUG //print communication between MMU2 and printer on serial
 //#define MMU_HAS_CUTTER
-
-// This is experimental feature requested by our test department.
-// There is no known use for ordinary user. If enabled by this macro
-// and enabled from printer menu (not enabled by default). It cuts filament
-// every time when switching filament from gcode. MMU_HAS_CUTTER needs to be
-// defined.
-
-//#define MMU_ALWAYS_CUT
 #define MMU_IDLER_SENSOR_ATTEMPTS_NR 21 //max. number of attempts to load filament if first load failed; value for max bowden length and case when loading fails right at the beginning
 
 #endif //__CONFIGURATION_PRUSA_H
