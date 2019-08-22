@@ -27,7 +27,9 @@ steps:
       - sed -i -e 's/#define FW_COMMIT_NR   [0-9]*/#define FW_COMMIT_NR  '"$DRONE_BUILD_STARTED"'/' Firmware/Configuration.h
       - bash -x PF-build.sh 1_75mm_MK3S-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BEAR-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-BEAR-SilverPSU-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-Bondtech-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
+      - bash -x PF-build.sh 1_75mm_MK3S-Bondtech-16-SilverPSU-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-320Z-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-Bondtech-320Z-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
       - bash -x PF-build.sh 1_75mm_MK3S-BEAR-320Z-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
