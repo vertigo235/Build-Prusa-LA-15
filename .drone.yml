@@ -6,7 +6,7 @@ workspace:
 
 steps:
   - name: tests
-    image: vertigo235/fw-build
+    image: vertigo235/fw-build:1
     commands:
       - bash -x test.sh
     when:
@@ -16,7 +16,7 @@ steps:
         - pull_request
   
   - name: build
-    image: vertigo235/fw-build
+    image: vertigo235/fw-build:1
     environment:
       BUILD_TYPE: GOLD
     commands:
@@ -57,7 +57,7 @@ steps:
        - pull_request
   
   - name: skele-build
-    image: vertigo235/fw-build
+    image: vertigo235/fw-build:1
     environment:
         BUILD_TYPE: GOLD
     commands:
@@ -77,9 +77,10 @@ steps:
       event:
        - push
        - tag
+       - pull_request
 
   - name: prepare-hex
-    image: vertigo235/fw-build
+    image: vertigo235/fw-build:1
     commands:
       - cd $CI_WORKSPACE
       - mkdir out
@@ -89,6 +90,22 @@ steps:
     when:
       event:
        - tag
+       - push
+       - pull_request
+
+  - name: transfersh
+    image: vertigo235/fw-build:1
+    commands:
+      - cd $CI_WORKSPACE
+      - mkdir transfersh
+      - cd transfersh
+      - zip -q prusa3d_fw_$(git rev-parse --short HEAD).zip $CI_WORKSPACE/out/*.*
+      - curl --upload-file prusa3d_fw_$(git rev-parse --short HEAD).zip https://transfer.sh/prusa3d_fw_$(git rev-parse --short HEAD).zip
+    when:
+      event:
+      - push
+      - tag
+      - pull_request
 
   - name: publish
     image: plugins/github-release
