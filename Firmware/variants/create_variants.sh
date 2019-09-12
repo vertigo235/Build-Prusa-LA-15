@@ -162,3 +162,23 @@ VARIANT="1_75mm_MK3S-Bondtech-16-SilverPSU-EINSy10a-E3Dv6full.h"
 cp ${BASE} ${VARIANT}
 sed -i -e 's/#define PSU_Delta */\/\/#define PSU_Delta /' ${VARIANT}
 
+##### Slice Thermistor Variants
+## MK3S
+VARIANT="1_75mm_MK3S-Bondtech-16-EINSy10a-E3Dv6full.h"
+VARIANT="1_75mm_MK3S-Bondtech-16-SliceThermistor-EINSy10a-E3Dv6full.h"
+cp ${BASE} ${VARIANT}
+sed -i -E 's/#define CUSTOM_MENDEL_NAME "([A-Za-z0-9\. ]*)"*/#define CUSTOM_MENDEL_NAME "Prusa i3 MK3S BPE Slice"/' ${VARIANT}
+sed -i -e 's/#define TEMP_SENSOR_0 5*/#define TEMP_SENSOR_0 800/' ${VARIANT}
+
+## MK2.5S
+VARIANT="1_75mm_MK25S-Bondtech-16-RAMBo13a-E3Dv6full.h"
+VARIANT="1_75mm_MK25S-Bondtech-16-SliceThermistor-RAMBo13a-E3Dv6full.h"
+cp ${BASE} ${VARIANT}
+sed -i -E 's/#define CUSTOM_MENDEL_NAME "([A-Za-z0-9\. ]*)"*/#define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5S BPE Slice"/' ${VARIANT}
+sed -i -e 's/#define TEMP_SENSOR_0 5*/#define TEMP_SENSOR_0 800/' ${VARIANT}
+
+VARIANT="1_75mm_MK25S-Bondtech-16-RAMBo10a-E3Dv6full.h"
+VARIANT="1_75mm_MK25S-Bondtech-16-SliceThermistor-RAMBo10a-E3Dv6full.h"
+cp ${BASE} ${VARIANT}
+sed -i -E 's/#define CUSTOM_MENDEL_NAME "([A-Za-z0-9\. ]*)"*/#define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5S BPE Slice"/' ${VARIANT}
+sed -i -e 's/#define TEMP_SENSOR_0 5*/#define TEMP_SENSOR_0 800/' ${VARIANT}
