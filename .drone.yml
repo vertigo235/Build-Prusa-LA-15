@@ -81,34 +81,59 @@ steps:
        - push
        - tag
        - pull_request
+    depends_on:
+      - build
 
   - name: prepare-hex
     image: vertigo235/fw-build:1
     commands:
       - cd $CI_WORKSPACE
       - mkdir out
+      - mkdir fileshare
       - cd $DRONE_WORKSPACE_BASE/PF-build-hex
       - mv `find -name "*.zip"` $CI_WORKSPACE/out
       - mv `find -name "*.hex"` $CI_WORKSPACE/out
+      - cd $CI_WORKSPACE/fileshare
+      - zip -q -j prusa3d_fw_$(git rev-parse --short HEAD).zip $CI_WORKSPACE/out/*.*
+
     when:
       event:
        - tag
        - push
        - pull_request
+    depends_on:
+      - build
+      - skele-build
 
   - name: transfersh
     image: vertigo235/fw-build:1
+    failure: ignore
     commands:
-      - cd $CI_WORKSPACE
-      - mkdir transfersh
-      - cd transfersh
-      - zip -q prusa3d_fw_$(git rev-parse --short HEAD).zip $CI_WORKSPACE/out/*.*
+      - cd $CI_WORKSPACE/fileshare
       - curl --upload-file prusa3d_fw_$(git rev-parse --short HEAD).zip https://transfer.sh/prusa3d_fw_$(git rev-parse --short HEAD).zip
+      - echo
     when:
       event:
       - push
       - tag
       - pull_request
+    depends_on:
+      - prepare-hex
+
+  - name: fileio
+    image: vertigo235/fw-build:1
+    failure: ignore
+    commands:
+      - cd $CI_WORKSPACE/fileshare
+      - curl -F "file=@prusa3d_fw_$(git rev-parse --short HEAD).zip" https://file.io
+      - echo
+    when:
+      event:
+      - push
+      - tag
+      - pull_request
+    depends_on:
+      - prepare-hex
 
   - name: publish
     image: plugins/github-release
@@ -123,3 +148,5 @@ steps:
     when:
       event: 
         - tag
+    depends_on:
+      - prepare-hex
