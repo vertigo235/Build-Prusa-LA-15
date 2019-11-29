@@ -5,6 +5,16 @@ workspace:
   path: Prusa-Firmware
 
 steps:
+  - name: enviornment
+    image: vertigo235/fw-build:1
+    commands:
+      - printenv
+    when:
+      event: 
+        - push
+        - tag
+        - pull_request
+  
   - name: tests
     image: vertigo235/fw-build:1
     commands:
@@ -20,6 +30,7 @@ steps:
     environment:
       BUILD_TYPE: GOLD
     commands:
+      - pwd
       - chmod +x PF-build.sh
       - chmod +x lang/config.sh
       - chmod +x lang/fw-clean.sh
@@ -64,6 +75,7 @@ steps:
     environment:
         BUILD_TYPE: GOLD
     commands:
+      - pwd
       - chmod +x PF-build.sh
       - chmod +x lang/config.sh
       - chmod +x lang/fw-clean.sh
@@ -74,7 +86,8 @@ steps:
       - wget https://raw.githubusercontent.com/nato2k/Skelestruder_Firmware_Patch/master/skele_patch.py
       - python skele_patch.py 490 16
       - cp ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-EINSy10a-E3Dv6full.h ./Prusa-Firmware/Firmware/variants/1_75mm_MK3-Skelestruder-16-EINSy10a-E3Dv6full.h
-      - cd $CI_WORKSPACE
+      - cd $DRONE_WORKSPACE
+      - pwd
       - bash -x PF-build.sh 1_75mm_MK3-Skelestruder-16-EINSy10a-E3Dv6full.h ALL $BUILD_TYPE
     when:
       event:
@@ -87,14 +100,14 @@ steps:
   - name: prepare-hex
     image: vertigo235/fw-build:1
     commands:
-      - cd $CI_WORKSPACE
+      - cd $DRONE_WORKSPACE
       - mkdir out
       - mkdir fileshare
       - cd $DRONE_WORKSPACE_BASE/PF-build-hex
-      - mv `find -name "*.zip"` $CI_WORKSPACE/out
-      - mv `find -name "*.hex"` $CI_WORKSPACE/out
-      - cd $CI_WORKSPACE/fileshare
-      - zip -q -j prusa3d_fw_$(git rev-parse --short HEAD).zip $CI_WORKSPACE/out/*.*
+      - mv `find -name "*.zip"` $DRONE_WORKSPACE/out
+      - mv `find -name "*.hex"` $DRONE_WORKSPACE/out
+      - cd $DRONE_WORKSPACE/fileshare
+      - zip -q -j prusa3d_fw_$(git rev-parse --short HEAD).zip $DRONE_WORKSPACE/out/*.*
 
     when:
       event:
@@ -109,7 +122,7 @@ steps:
     image: vertigo235/fw-build:1
     failure: ignore
     commands:
-      - cd $CI_WORKSPACE/fileshare
+      - cd $DRONE_WORKSPACE/fileshare
       - curl --upload-file prusa3d_fw_$(git rev-parse --short HEAD).zip https://transfer.sh/prusa3d_fw_$(git rev-parse --short HEAD).zip
       - echo
     when:
@@ -124,7 +137,7 @@ steps:
     image: vertigo235/fw-build:1
     failure: ignore
     commands:
-      - cd $CI_WORKSPACE/fileshare
+      - cd $DRONE_WORKSPACE/fileshare
       - curl -F "file=@prusa3d_fw_$(git rev-parse --short HEAD).zip" https://file.io
       - echo
     when:
