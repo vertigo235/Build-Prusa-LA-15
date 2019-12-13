@@ -1,3 +1,7 @@
+# IMPORTANT NOTE ABOUT WARRANTY
+Please note that if you use any unofficial firmware that you are voiding your Prusa warranty on all your Electronics.  Also understand that no risk of liabilty or warranty is provided for using the firmware available on this repository. Use at your own risk. 
+
+
 # Table of contents
 
 <!--ts-->
