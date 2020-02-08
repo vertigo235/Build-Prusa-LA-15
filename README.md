@@ -1,3 +1,7 @@
+# NOTICE - THIS REPO IS NO LONGER MAINTAINTED
+Now that the official Prusa FW has merged LA 1.5, this repository and releases will no longer be updaed, please visit my Prusa fork instead.  https://github.com/vertigo235/Prusa-Firmware
+
+
 # IMPORTANT NOTE ABOUT WARRANTY
 Please note that if you use any unofficial firmware that you are voiding your Prusa warranty on all your Electronics.  Also understand that no risk of liabilty or warranty is provided for using the firmware available on this repository. Use at your own risk. 
 
