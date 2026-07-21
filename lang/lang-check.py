@@ -40,7 +40,7 @@ def parse_txt(lang, no_warning):
 
             if len(translation)-2 > cols*rows:
                 stderr.write(
-                    "[E]: Text %s is longer then definiton on line %d\n" %
+                    "[E]: Text %s is longer then definition on line %d\n" %
                     (translation, lines))
                 stderr.flush()
 
